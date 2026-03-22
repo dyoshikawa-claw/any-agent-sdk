@@ -9,7 +9,7 @@ Provide the same high-level interface regardless of the underlying agent SDK.
 Initial targets:
 
 - OpenCode SDK (implemented)
-- Claude Agent SDK (placeholder)
+- Claude Agent SDK (implemented)
 
 Design direction:
 
@@ -19,7 +19,7 @@ Design direction:
 
 ## Status
 
-OpenCode adapter has a minimal working implementation. Claude Agent adapter is still a placeholder.
+OpenCode adapter has a minimal working implementation. Claude Agent adapter now supports run + stream with Claude Code's CLI-backed SDK, including tool call normalization and text streaming.
 
 ## Minimal SDK shape
 
@@ -124,7 +124,21 @@ Each provider adapter maps native SDK responses into the shared event/result mod
 ## Provider status
 
 - OpenCode: run + stream (SSE-backed), text, tool events, basic usage mapping
-- Claude Agent: not implemented yet
+- Claude Agent: run + stream (CLI-backed), text + text-delta, tool events, usage + finish reason mapping
+
+### Claude Agent adapter behavior
+
+- Uses `@anthropic-ai/claude-agent-sdk` `query()` under the hood
+- `run()` collects final assistant text from content blocks; `stream()` emits text deltas when available
+- Tool calls are emitted from `tool_use`, `server_tool_use`, and `mcp_tool_use` blocks
+- Tool results are emitted from `tool_result`, `mcp_tool_result`, or `*_tool_result` blocks
+- `approvalMode` maps to Claude permission modes: `auto` -> `acceptEdits`, `manual`/`default` -> `default`
+
+### Claude Agent limitations
+
+- Does not expose every SDK message subtype (task progress, hooks, prompt suggestions)
+- Tool results emitted without a matching tool-use id fall back to a generic tool name
+- Usage tokens map to input/output only; provider-specific extras remain in `raw`
 
 ## Milestones
 
