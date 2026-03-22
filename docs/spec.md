@@ -140,14 +140,30 @@ interface ProviderAdapter {
 
 ## Implementation status
 
-The minimal skeleton now exists in `src/` with a working OpenCode adapter:
+The minimal skeleton now exists in `src/` with working OpenCode and Claude Agent adapters:
 
 - shared types
 - `createAgent` with provider dispatch
 - OpenCode adapter (run + stream)
-- Claude Agent adapter (placeholder)
+- Claude Agent adapter (run + stream)
 - shared error model
-- co-located tests for `createAgent` and OpenCode adapter
+- co-located tests for `createAgent`, OpenCode adapter, and Claude Agent adapter
+
+## Claude Agent adapter surface
+
+- Uses `@anthropic-ai/claude-agent-sdk` `query()` for both `run()` and `stream()`
+- `run()` aggregates text from assistant content blocks and emits normalized tool events
+- `stream()` emits `text-delta` events from `content_block_delta` stream events when available
+- Tool calls normalize `tool_use`, `server_tool_use`, and `mcp_tool_use` blocks
+- Tool results normalize `tool_result`, `mcp_tool_result`, and `*_tool_result` blocks
+- `approvalMode` maps to permission modes (`auto` -> `acceptEdits`, `manual`/`default` -> `default`)
+- Provider-specific options must be passed via `providerOptions` (query function override, SDK options)
+
+### Claude Agent limitations
+
+- Task progress, hook events, and prompt suggestions are not mapped to normalized events yet
+- Usage includes only input/output token counts; cost and cache details remain in `raw`
+- Tool results without a matching tool id fall back to generic tool names
 
 ## OpenCode adapter surface
 
