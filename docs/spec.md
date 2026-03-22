@@ -115,6 +115,17 @@ interface ProviderAdapter {
 }
 ```
 
+## Parity contract tests
+
+The provider adapters should satisfy a shared set of behavioral expectations:
+
+- `run()` returns a normalized result object that includes `provider`, `text`, and `events`.
+- `run()` emits `text`, `tool-call`, and `tool-result` events that match the normalized shape.
+- `run()` emits `error` events when providers surface structured errors in otherwise successful runs.
+- `stream()` emits a `status` lifecycle (`running` then `completed` or `failed`).
+- `stream()` emits `text-delta` events when incremental text is available.
+- `stream()` emits `error` events and a terminal `failed` status when provider stream errors occur.
+
 ## Normalization rules
 
 ### Text

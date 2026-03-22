@@ -21,6 +21,62 @@ Design direction:
 
 OpenCode adapter has a minimal working implementation. Claude Agent adapter now supports run + stream with Claude Code's CLI-backed SDK, including tool call normalization and text streaming.
 
+## Provider examples
+
+### OpenCode (run + stream)
+
+```ts
+import { createAgent } from "any-agent-sdk";
+
+const agent = createAgent({
+  provider: "opencode",
+  model: "github-copilot/claude-opus-4.6",
+  providerOptions: {
+    // Optional: pass an OpencodeClient or request options.
+  },
+});
+
+const result = await agent.run({
+  prompt: "Summarize this diff.",
+  cwd: process.cwd(),
+});
+
+console.log(result.text);
+
+for await (const event of agent.stream({ prompt: "Stream a quick summary." })) {
+  if (event.type === "text-delta") {
+    process.stdout.write(event.text);
+  }
+}
+```
+
+### Claude Agent (run + stream)
+
+```ts
+import { createAgent } from "any-agent-sdk";
+
+const agent = createAgent({
+  provider: "claude-agent",
+  model: "claude-sonnet-4-6",
+  providerOptions: {
+    // Optional: override query() or pass SDK options.
+  },
+});
+
+const result = await agent.run({
+  prompt: "Give me a code review checklist.",
+  approvalMode: "auto",
+});
+
+console.log(result.text);
+
+for await (const event of agent.stream({ prompt: "Stream three tips." })) {
+  if (event.type === "text-delta") {
+    process.stdout.write(event.text);
+  }
+}
+```
+
 ## Minimal SDK shape
 
 ### Core idea
