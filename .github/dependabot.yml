@@ -1,0 +1,57 @@
+version: 2
+updates:
+  # Automatic updates for npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 1
+    open-pull-requests-limit: 2
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+    reviewers:
+      - "dyoshikawa"
+      - "cm-dyoshikawa"
+    allow:
+      - dependency-type: "all"
+    ignore:
+      - dependency-name: "@eslint/js"
+        versions:
+          - ">=10.0.0 <11.0.0"
+      - dependency-name: "eslint"
+        versions:
+          - ">=10.0.0 <11.0.0"
+
+  # Automatic updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 1
+    open-pull-requests-limit: 1
+    groups:
+      all-actions:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "actions/checkout"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "ci"
+      - "automated"
+    reviewers:
+      - "dyoshikawa"
+      - "cm-dyoshikawa"
