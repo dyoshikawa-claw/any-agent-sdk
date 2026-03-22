@@ -3,6 +3,7 @@
 ## Problem
 
 AI coding agent SDKs expose different APIs for:
+
 - starting runs
 - streaming partial output
 - surfacing tool calls
@@ -51,7 +52,7 @@ for await (const event of agent.stream({
 }
 ```
 
-## Proposed type model
+## Type model
 
 ### Provider
 
@@ -117,29 +118,35 @@ interface ProviderAdapter {
 ## Normalization rules
 
 ### Text
+
 - final user-visible text should be available as `result.text`
 - incremental chunks should flow via `text-delta`
 
 ### Tools
+
 - tool invocation becomes `tool-call`
 - tool completion becomes `tool-result`
 - raw provider payload may still be stored in `raw`
 
 ### Usage
+
 - normalize token accounting when available
 - allow partial usage data
 
 ### Errors
+
 - provider exceptions should be wrapped in shared error classes later
 - event streams should emit `error` before failing when practical
 
-## Implementation plan
+## Implementation status
 
-1. define shared types
-2. implement `createAgent`
-3. add OpenCode adapter
-4. add Claude Agent adapter
-5. add parity tests that assert normalized behavior across both
+The minimal skeleton now exists in `src/`:
+
+- shared types
+- `createAgent` with provider dispatch
+- provider adapter interfaces and placeholder adapters
+- shared error model
+- co-located tests for `createAgent`
 
 ## Repo bootstrap note
 
