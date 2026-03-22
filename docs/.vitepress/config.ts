@@ -104,6 +104,10 @@ export default defineConfig({
             text: "Supported Tools",
             link: "/reference/supported-tools",
           },
+          {
+            text: "OpenCode Provider",
+            link: "/reference/providers/opencode",
+          },
           { text: "CLI Commands", link: "/reference/cli-commands" },
           { text: "File Formats", link: "/reference/file-formats" },
           { text: "MCP Server", link: "/reference/mcp-server" },

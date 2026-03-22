@@ -7,24 +7,21 @@ OpenCode-like unified SDK wrapper for AI coding agents.
 Provide the same high-level interface regardless of the underlying agent SDK.
 
 Initial targets:
-- OpenCode SDK
-- Claude Agent SDK
+
+- OpenCode SDK (implemented)
+- Claude Agent SDK (placeholder)
 
 Design direction:
+
 - **OpenCode-like interface first**
 - provider-specific differences normalized behind adapters
 - streaming, tool calls, text output, and session handling exposed consistently
 
 ## Status
 
-This repository is intentionally scaffolded from `rulesync` to keep the toolchain and development environment aligned.
+OpenCode adapter has a minimal working implementation. Claude Agent adapter is still a placeholder.
 
-Current state:
-- environment/tooling copied from `rulesync`
-- `src/` intentionally removed
-- first-pass product/spec proposal added before implementation
-
-## First-pass product shape
+## Minimal SDK shape
 
 ### Core idea
 
@@ -42,10 +39,11 @@ const result = await agent.run({
 ```
 
 The same call shape should work for:
+
 - `provider: "opencode"`
 - `provider: "claude-agent"`
 
-## Proposed API principles
+## API principles
 
 1. **Single run interface**
    - `agent.run({ prompt, cwd?, context?, approvalMode? })`
@@ -58,7 +56,7 @@ The same call shape should work for:
 5. **Provider escape hatches**
    - raw provider options available without polluting the common interface
 
-## Proposed normalized interface
+## Normalized interface
 
 ```ts
 export type AgentProvider = "opencode" | "claude-agent";
@@ -112,36 +110,33 @@ export interface AnyAgent {
 
 ## Adapter design
 
-Planned internal split:
-- `providers/opencode/*`
-- `providers/claude-agent/*`
-- `core/types.ts`
-- `core/normalize.ts`
-- `core/errors.ts`
+Internal split (now present):
 
-Each provider adapter should map native SDK responses into the shared event/result model.
+- `src/core/types.ts`
+- `src/core/adapter.ts`
+- `src/core/errors.ts`
+- `src/providers/opencode/adapter.ts`
+- `src/providers/claude-agent/adapter.ts`
+- `src/create-agent.ts`
+
+Each provider adapter maps native SDK responses into the shared event/result model.
+
+## Provider status
+
+- OpenCode: run + stream (SSE-backed), text, tool events, basic usage mapping
+- Claude Agent: not implemented yet
 
 ## Milestones
 
-### v0
+### v0 (in progress)
+
 - provider selection
 - `run()`
 - `stream()`
 - normalized text output
 - normalized tool-call/tool-result events
-- OpenCode SDK adapter
+- OpenCode SDK adapter (in progress)
 - Claude Agent SDK adapter
-
-### v0.2
-- session/thread abstraction
-- resumable runs
-- usage normalization
-- provider capability introspection
-
-### v0.3
-- approval/tool policy abstraction
-- shared test harness across providers
-- fixtures for parity testing
 
 ## Open design questions
 
