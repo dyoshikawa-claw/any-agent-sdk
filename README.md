@@ -8,8 +8,8 @@ Provide the same high-level interface regardless of the underlying agent SDK.
 
 Initial targets:
 
-- OpenCode SDK
-- Claude Agent SDK
+- OpenCode SDK (implemented)
+- Claude Agent SDK (placeholder)
 
 Design direction:
 
@@ -19,7 +19,7 @@ Design direction:
 
 ## Status
 
-Minimal SDK skeleton is now present. Provider adapters are placeholders and will be filled in later.
+OpenCode adapter has a minimal working implementation. Claude Agent adapter is still a placeholder.
 
 ## Minimal SDK shape
 
@@ -119,7 +119,12 @@ Internal split (now present):
 - `src/providers/claude-agent/adapter.ts`
 - `src/create-agent.ts`
 
-Each provider adapter will map native SDK responses into the shared event/result model.
+Each provider adapter maps native SDK responses into the shared event/result model.
+
+## Provider status
+
+- OpenCode: run + stream (SSE-backed), text, tool events, basic usage mapping
+- Claude Agent: not implemented yet
 
 ## Milestones
 
@@ -130,7 +135,7 @@ Each provider adapter will map native SDK responses into the shared event/result
 - `stream()`
 - normalized text output
 - normalized tool-call/tool-result events
-- OpenCode SDK adapter
+- OpenCode SDK adapter (in progress)
 - Claude Agent SDK adapter
 
 ## Open design questions

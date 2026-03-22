@@ -140,13 +140,24 @@ interface ProviderAdapter {
 
 ## Implementation status
 
-The minimal skeleton now exists in `src/`:
+The minimal skeleton now exists in `src/` with a working OpenCode adapter:
 
 - shared types
 - `createAgent` with provider dispatch
-- provider adapter interfaces and placeholder adapters
+- OpenCode adapter (run + stream)
+- Claude Agent adapter (placeholder)
 - shared error model
-- co-located tests for `createAgent`
+- co-located tests for `createAgent` and OpenCode adapter
+
+## OpenCode adapter surface
+
+- `run()` uses `session.create` + `session.prompt`
+- `stream()` uses `event.subscribe` + `session.promptAsync` when available, otherwise falls back to `run()`
+- Text output is mapped from text parts; text deltas use `message.part.updated` events
+- Tool parts emit `tool-call` + `tool-result` events
+- Usage is mapped from `AssistantMessage.tokens` (input + output)
+- Provider-specific options are passed via `providerOptions`
+- `sessionId` + `continueSession` can be used to reuse an existing session
 
 ## Repo bootstrap note
 

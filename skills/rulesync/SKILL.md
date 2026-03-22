@@ -31,6 +31,7 @@ A Node.js CLI tool that automatically generates configuration files for various 
 ### Reference
 
 - [Supported Tools](./supported-tools.md)
+- [OpenCode Provider](./opencode.md)
 - [CLI Commands](./cli-commands.md)
 - [File Formats](./file-formats.md)
 - [MCP Server](./mcp-server.md)
